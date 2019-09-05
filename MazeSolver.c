@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int** maze;
-int rows = 2; //increased this number for testing purposes
+int rows = 2; //increa sed this number for testing purposes
 int columns = 0;
 
 
