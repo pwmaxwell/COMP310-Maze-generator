@@ -1,0 +1,4 @@
+Must be run using:
+
+gcc MazeSolver.c -o MazeSolver
+./MazeSolver
