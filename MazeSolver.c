@@ -5,7 +5,7 @@
 
 int** maze;
 int** splitpath;
-int rows = 2; //increased this number for testing purposes
+int rows = 2; 
 int columns = 0;
 int count = 1;
 int startRow;
@@ -25,28 +25,21 @@ void aloc_maze(){ // taken from class discussion
 void printMaze(){
 	for (int i = 0; i < rows; ++i) { //this will print out the maze
 		for (int j = 0; j < columns; ++j) {
-			if(maze[i][j] !=99) // could not figure out how to remove the added 0s from my program so I am instead adding an if statement which will require maze[i][j] to not be 0 to print
+			if(maze[i][j] !=99) 
 				printf("%3i", maze[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
 		}
 		printf("\n");
 	}	
 	printf("\n");
-	for (int i = 0; i < rows; ++i) { //this will print out the maze
-		for (int j = 0; j < columns; ++j) {
-			if(maze[i][j] !=99) // could not figure out how to remove the added 0s from my program so I am instead adding an if statement which will require maze[i][j] to not be 0 to print
-				printf("%3i", splitpath[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
-		}
-		printf("\n");
-	}
-	printf("\n");
 }
 
+
 int solveMaze(int row, int col){
-	currentLocation = &maze[row][col];
+	currentLocation = &maze[row][col];  	// sets the current location to where you are currently looking 
 	numberOfPaths = 0;
 	maze[row][col] = count;
-	if(row != 0){
-		if(maze[row-1][col] == 0){
+	if(row != 0){							// if you are at the top row it will skip this step (to avoid segmentation faults)
+		if(maze[row-1][col] == 0){			// 4 if statements which see if there are multiple paths you are able to travel
 			numberOfPaths++;
 		}
 		if(maze[row+1][col] == 0){
@@ -58,11 +51,11 @@ int solveMaze(int row, int col){
 		if(maze[row][col+1] == 0){
 			numberOfPaths++;
 		}
-		if(numberOfPaths >= 2){
-			numberOfPaths--;
+		if(numberOfPaths >= 2){				// if there are multiple paths which you can go it will put that number into the splitpath array. this will be used to track where
+			numberOfPaths--;				// you need to return to after you solve the first path
 			splitpath[row][col] = numberOfPaths;
 		}
-		if(maze[row][col -1] == 0){
+		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
 			maze[row][col] = count;
 			count++;
 			solveMaze(row,col-1);
@@ -82,7 +75,7 @@ int solveMaze(int row, int col){
 			count++;
 			solveMaze(row-1, col);
 		}
-		else{
+		else{							// if it could not move anywhere it will end since it must be at a deadend 
 			maze[row][col] = count;
 			return 1;
 		}
@@ -95,7 +88,6 @@ void getMaze(char* file_name){
 	char c2;
 	FILE* file = fopen(file_name, "r");	
 	
-	/* find number of columns by examining the first line only. Could break if other lines have more or fewer columns. */
 	while ((c = getc(file)) != EOF){ // this will determine how many columns and rows are needed to alocate them into the 2d array
 		if(c == '\n'){
 			columns++;
@@ -103,36 +95,29 @@ void getMaze(char* file_name){
 		}
 		columns++;
 	}
-	//rows = 1;
-	//printf("rows=%d, columns=%d\n", rows, columns);
 	while((c = getc(file)) != EOF){
 		if(c == '\n')
 			rows++;
 	}
 	
-	
-	//printf("%i", rows);
-	//printf("%c", '\n');
-	//printf("%i", columns);
 	aloc_maze();
-	fclose(file);
+	fclose(file);					// im not sure why but it was needing me to close and reopen the file here
 	file = fopen(file_name, "r");
 	
-	for(int i = 0; i < rows; i++){ // this will put the numbers into the array
+	for(int i = 0; i < rows; i++){  // this will put the numbers into the maze array
 	int j;
 		for (j = 0; j < columns; j++){
 			c2= getc(file);
-			if(c2 == 'b')
+			if(c2 == 'b')			// four if statements which look at the file and puts the number into the maze which coresponds with the letter in the file
 				maze[i][j] = -1;
 			else if(c2 == ' ')
 				maze[i][j] = 0;
 			else if(c2 == 's')
 				maze[i][j] = 1;
 			else {
-				//fprintf(stderr, "Unexpected character %c\n", c2);
 				maze[i][j] = 99;
 			}	
-			if(c2 == 's'){ //this will figure out where to start
+			if(c2 == 's'){ 			//this will figure out where to start
 				startRow = i;
 				startCol = j;			}
 		}
@@ -143,55 +128,19 @@ void getMaze(char* file_name){
 	}
 		fclose(file);
 	solveMaze(startRow, startCol);
-	
-	/*for(int i =0; i< rows; i++){
-		for(int j=0; j<columns -2 ; j++){
-			for(int k = 0; k <splitpath[i][j];k++){			
-				if(splitpath[i][j] == 1){
-					count = maze[i][j];
-					solveMaze(i,j);
-				}
-			}
-			/*else if(splitpath[i][j] == 2){
-				count =maze[i][j];
-				solveMaze(i,j);
-				count = maze[i][j];
-				solveMaze(i,j);
-			}
-			elseif(splitpath[i][j] == 3){
-				count = maze[i][j];
-				solveMaze(i,j);
-				count = maze[i][j];
-				solveMaze(i,j);
-				count = maze[i][j];
-				solveMaze(i,j);
-			}
-			
-		}
-	}*/
-	for(int i =0; i< rows; i++){
+
+	for(int i =0; i< rows; i++){	// this will go back into splitpath, see where there is a number which is more than 0, and then move to that location in maze
 		for(int j=0; j<columns -2 ; j++){		
 			while(splitpath[i][j] != 0){
 				count = maze[i][j];
-				//printf("\n");
-				//printf("%i", count);
-				//printf("\n");
 				splitpath[i][j]--;
-				solveMaze(i,j);
-				
+				solveMaze(i,j);	
 			}
 		}
 	}
 	printMaze();
-	
-
 }
-
-
-
 
 int main(){
 	getMaze("maze1.txt");
 }
-
-
