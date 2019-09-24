@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "TutorialConfig.h.in"
+#include <getopt.h>
 
 
 int** maze;
@@ -56,6 +57,7 @@ int solveMaze(int row, int col){
 			splitpath[row][col] = numberOfPaths;
 		}
 		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
+			//fprintf(journal, row, col, maze[row][col], count);
 			maze[row][col] = count;
 			count++;
 			solveMaze(row,col-1);
@@ -141,6 +143,34 @@ void getMaze(char* file_name){
 	printMaze();
 }
 
-int main(){
-	getMaze("maze1.txt");
+int main(int argc, char *argv[]){
+	char *journalWrite = NULL;
+	char *journalRead = NULL;
+	
+	char *INPUTFILE = argv[1];
+	
+	int option_index = 1;
+	//printf(getopt(argc, argv, "o:j:"));
+	while((option_index = getopt(argc, argv, "o:j:")) != -1){
+		//printf("TEST");
+		switch(option_index){
+			case 'o':
+				journalWrite = optarg;
+				FILE* journal = fopen(argv[3], "w");
+				printf("Test %s \n", journalWrite);
+				break;
+			case 'j':
+				journalRead = optarg;
+				break;
+			default:
+				return 1;
+		}
+	}
+	
+	
+	
+	getMaze(INPUTFILE);
+	//getMaze("maze1.txt");
+	//fclose(journal);
+	return 0;
 }
