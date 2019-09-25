@@ -117,7 +117,7 @@ int solveFromJournal(){
 
 void getMaze(char* file_name){
 	char c;
-	char c2;
+	
 	FILE* file = fopen(file_name, "r");	
 	
 	while ((c = getc(file)) != EOF){ // this will determine how many columns and rows are needed to alocate them into the 2d array
@@ -131,11 +131,13 @@ void getMaze(char* file_name){
 		if(c == '\n')
 			rows++;
 	}
-	
-	aloc_maze();
-	fclose(file);					// im not sure why but it was needing me to close and reopen the file here
-	file = fopen(file_name, "r");
-	
+
+	//aloc_maze();
+	fclose(file);
+}	
+void placeNumbers(char* file_name){
+	FILE* file = fopen(file_name, "r");
+	char c2;
 	for(int i = 0; i < rows; i++){  // this will put the numbers into the maze array
 	int j;
 		for (j = 0; j < columns; j++){
@@ -151,16 +153,20 @@ void getMaze(char* file_name){
 			}	
 			if(c2 == 's'){ 			//this will figure out where to start
 				startRow = i;
-				startCol = j;			}
+				startCol = j;			
+			}
 		}
 		if (j < columns) {
 			while (c2 != '\n')
 				c2 = getc(file);
 		}
 	}
-		fclose(file);
-	solveMaze(startRow, startCol);
+		fclose(file);	
+}
 
+
+	
+void searchSplitpath(){
 	for(int i =0; i< rows; i++){	// this will go back into splitpath, see where there is a number which is more than 0, and then move to that location in maze
 		for(int j=0; j<columns -2 ; j++){		
 			while(splitpath[i][j] != 0){
@@ -172,7 +178,6 @@ void getMaze(char* file_name){
 			}
 		}
 	}
-	printMaze();
 }
 
 int main(int argc, char *argv[]){
@@ -190,6 +195,11 @@ int main(int argc, char *argv[]){
 				journalWrite = optarg;
 				journal = fopen(journalWrite, "w");
 				getMaze(INPUTFILE);
+				aloc_maze();
+				placeNumbers(INPUTFILE);
+				solveMaze(startRow, startCol);
+				searchSplitpath();
+				printMaze();
 				fclose(journal);
 				
 				break;
@@ -199,10 +209,9 @@ int main(int argc, char *argv[]){
 				solveFromJournal();
 				break;
 			default:
-				printf("I GOT THERE");
+				//printf("I GOT THERE");
 				return 1;
 		}
 	}
-
 	return 0;
 }
