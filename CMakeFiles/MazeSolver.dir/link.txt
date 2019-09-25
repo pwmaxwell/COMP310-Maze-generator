@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/MazeSolver.dir/MazeSolver.c.o  -o bin/MazeSolver 

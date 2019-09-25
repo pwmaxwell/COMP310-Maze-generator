@@ -1,0 +1,3 @@
+/mnt/c/users/pwmax/Desktop/Assignment1Comp310/Assignment/CMakeFiles/rebuild_cache.dir
+/mnt/c/users/pwmax/Desktop/Assignment1Comp310/Assignment/CMakeFiles/MazeSolver.dir
+/mnt/c/users/pwmax/Desktop/Assignment1Comp310/Assignment/CMakeFiles/edit_cache.dir
