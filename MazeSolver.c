@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "TutorialConfig.h.in"
+//#include "TutorialConfig.h.in"
 #include <getopt.h>
 
 
@@ -13,6 +13,8 @@ int startRow;
 int startCol;
 int numberOfPaths;
 int* currentLocation;	
+FILE* journal;
+int lastmove;
 
 void aloc_maze(){ // taken from class discussion
 	maze = malloc(rows * sizeof(int*));
@@ -38,18 +40,24 @@ void printMaze(){
 int solveMaze(int row, int col){
 	currentLocation = &maze[row][col];  	// sets the current location to where you are currently looking 
 	numberOfPaths = 0;
+	//lastmove = count;
 	maze[row][col] = count;
+	
 	if(row != 0){							// if you are at the top row it will skip this step (to avoid segmentation faults)
 		if(maze[row-1][col] == 0){			// 4 if statements which see if there are multiple paths you are able to travel
+			//fprintf(journal,"%d %d %d %d \n",row, col, maze[row][col], count);
 			numberOfPaths++;
 		}
 		if(maze[row+1][col] == 0){
+			//fprintf(journal,"%d %d %d %d \n",row, col, maze[row][col], count);
 			numberOfPaths++;
 		}
 		if(maze[row][col-1] == 0){
+			//fprintf(journal,"%d %d %d %d \n",row, col, maze[row][col], count);
 			numberOfPaths++;
 		}
 		if(maze[row][col+1] == 0){
+			//fprintf(journal,"%d %d %d %d \n",row, col, maze[row][col], count);
 			numberOfPaths++;
 		}
 		if(numberOfPaths >= 2){				// if there are multiple paths which you can go it will put that number into the splitpath array. this will be used to track where
@@ -57,24 +65,40 @@ int solveMaze(int row, int col){
 			splitpath[row][col] = numberOfPaths;
 		}
 		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
-			//fprintf(journal, row, col, maze[row][col], count);
+			
+			
 			maze[row][col] = count;
+			fprintf(journal,"%d %d %d %d \n",row, col, lastmove, count);
 			count++;
+			lastmove = count-1;
 			solveMaze(row,col-1);
 		}
 		else if(maze[row+1][col] == 0){
+			//lastmove = count;
+			
 			maze[row][col] = count;
+			fprintf(journal,"%d %d %d %d \n",row, col, lastmove, count);
 			count++;
+			
+			lastmove = count -1;
 			solveMaze(row+1, col);
 		}	
 		else if(maze[row][col +1] == 0){
+			//lastmove = count;
+			
 			maze[row][col] = count;
+			fprintf(journal,"%d %d %d %d \n",row, col, lastmove, count);
 			count++;
+			lastmove = count -1;
 			solveMaze(row, col + 1);	
 		}
 		else if(maze[row-1][col] == 0){
+			//lastmove = count;
+			
 			maze[row][col] = count;
+			fprintf(journal,"%d %d %d %d \n",row, col, lastmove, count);
 			count++;
+			lastmove = count -1;
 			solveMaze(row-1, col);
 		}
 		else{							// if it could not move anywhere it will end since it must be at a deadend 
@@ -82,6 +106,12 @@ int solveMaze(int row, int col){
 			return 1;
 		}
 	}
+}
+
+int solveFromJournal(){
+	
+
+	printMaze();
 }
 
 
@@ -134,6 +164,8 @@ void getMaze(char* file_name){
 	for(int i =0; i< rows; i++){	// this will go back into splitpath, see where there is a number which is more than 0, and then move to that location in maze
 		for(int j=0; j<columns -2 ; j++){		
 			while(splitpath[i][j] != 0){
+				fprintf(journal,"%d %d %d %d \n",i, j, lastmove, count);
+				lastmove=count;
 				count = maze[i][j];
 				splitpath[i][j]--;
 				solveMaze(i,j);	
@@ -156,21 +188,21 @@ int main(int argc, char *argv[]){
 		switch(option_index){
 			case 'o':
 				journalWrite = optarg;
-				FILE* journal = fopen(argv[3], "w");
-				printf("Test %s \n", journalWrite);
+				journal = fopen(journalWrite, "w");
+				getMaze(INPUTFILE);
+				fclose(journal);
+				
 				break;
 			case 'j':
 				journalRead = optarg;
+				journal = fopen(journalRead, "r");
+				solveFromJournal();
 				break;
 			default:
+				printf("I GOT THERE");
 				return 1;
 		}
 	}
-	
-	
-	
-	getMaze(INPUTFILE);
-	//getMaze("maze1.txt");
-	//fclose(journal);
+
 	return 0;
 }
