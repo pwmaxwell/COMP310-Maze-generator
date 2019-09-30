@@ -65,16 +65,17 @@ int solveMaze(int row, int col){
 			splitpath[row][col] = numberOfPaths;
 		}
 		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
+			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
-			fprintf(journal,"%d %d %d \n",row, col, count);
+			
 			count++;
 			solveMaze(row,col-1);
 		}
 		else if(maze[row+1][col] == 0){
 			//lastmove = count;
-			
+			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
-			fprintf(journal,"%d %d %d \n",row, col, count);
+			
 			count++;
 			
 			
@@ -82,38 +83,44 @@ int solveMaze(int row, int col){
 		}	
 		else if(maze[row][col +1] == 0){
 			//lastmove = count;
-			
+			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
-			fprintf(journal,"%d %d %d \n",row, col, count);
+			
 			count++;
 			solveMaze(row, col + 1);	
 		}
 		else if(maze[row-1][col] == 0){
-			//lastmove = count;
-			
+			///lastmove = count;
+			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
-			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
-
 			solveMaze(row-1, col);
 		}
 		else{							// if it could not move anywhere it will end since it must be at a deadend 
-			fprintf(journal,"%d %d %d \n",row, col, count);
+			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
 			return 1;
 		}
 	}
 }
 
+int fillJournal(){
+	for(int i = 0; i <rows; i++){
+		for (int j = 0; j < columns; j++){
+			fprintf(journal, "%d %d %d \n", i, j, maze[i][j]);
+		}
+	}
+	return 1;
+}
+
+
 int solveFromJournal(){
 	char c;
 	int journalRows = 0;
 	FILE* file3 = fopen("journal.txt", "r");
-	char firstValueChar[10];
 	int firstValue = 0;
 	int secondValue = 0;
 	int thirdValue = 0;
-	printf("%s",firstValueChar);
 	for(int i = 0; i <rows; i++){ 		// sets all values to -1 as a baseline. will remove later
 		for(int j = 0; j <columns; j++){
 			maze[i][j] = -1;
@@ -126,18 +133,8 @@ int solveFromJournal(){
 	rewind(file3);
 	for(int i = 0; i <journalRows; i++){
 		fscanf(file3, "%d %d %d", &firstValue, &secondValue, &thirdValue);
-		printf("%i, %i, %i", firstValue, secondValue, thirdValue);
-		printf("\n");
-		
 		maze[firstValue][secondValue] = thirdValue;
 	}
-	//printf("%d", firstValue);
-	/*while(fscanf(file3,"%s",&firstValueChar)!= EOF){
-		printf("%d", firstValueChar);
-		printf("\n");
-	}*/
-	//printf("%d", journalRows);
-
 	fclose(file3);	
 }
 
@@ -247,6 +244,7 @@ int main(int argc, char *argv[]){
 				placeNumbers(INPUTFILE);
 				solveMaze(startRow, startCol);
 				searchSplitpath();
+				fillJournal();
 				printMaze();
 				fclose(journal);
 				
