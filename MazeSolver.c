@@ -65,8 +65,6 @@ int solveMaze(int row, int col){
 			splitpath[row][col] = numberOfPaths;
 		}
 		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
-			
-			
 			maze[row][col] = count;
 			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
@@ -100,6 +98,7 @@ int solveMaze(int row, int col){
 			solveMaze(row-1, col);
 		}
 		else{							// if it could not move anywhere it will end since it must be at a deadend 
+			fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
 			return 1;
 		}
