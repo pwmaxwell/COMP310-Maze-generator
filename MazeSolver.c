@@ -45,19 +45,15 @@ int solveMaze(int row, int col){
 	
 	if(row != 0){							// if you are at the top row it will skip this step (to avoid segmentation faults)
 		if(maze[row-1][col] == 0){			// 4 if statements which see if there are multiple paths you are able to travel
-
 			numberOfPaths++;
 		}
 		if(maze[row+1][col] == 0){
-			
 			numberOfPaths++;
 		}
 		if(maze[row][col-1] == 0){
-			
 			numberOfPaths++;
 		}
 		if(maze[row][col+1] == 0){
-			
 			numberOfPaths++;
 		}
 		if(numberOfPaths >= 2){				// if there are multiple paths which you can go it will put that number into the splitpath array. this will be used to track where
@@ -65,39 +61,27 @@ int solveMaze(int row, int col){
 			splitpath[row][col] = numberOfPaths;
 		}
 		if(maze[row][col -1] == 0){			// four more if statements which look in each direction, see where it can move, and then move there
-			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
 			
 			count++;
 			solveMaze(row,col-1);
 		}
 		else if(maze[row+1][col] == 0){
-			//lastmove = count;
-			//fprintf(journal,"%d %d %d \n",row, col, count);
-			maze[row][col] = count;
-			
+			maze[row][col] = count;	
 			count++;
-			
-			
 			solveMaze(row+1, col);
 		}	
 		else if(maze[row][col +1] == 0){
-			//lastmove = count;
-			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
-			
 			count++;
 			solveMaze(row, col + 1);	
 		}
 		else if(maze[row-1][col] == 0){
-			///lastmove = count;
-			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
 			count++;
 			solveMaze(row-1, col);
 		}
 		else{							// if it could not move anywhere it will end since it must be at a deadend 
-			//fprintf(journal,"%d %d %d \n",row, col, count);
 			maze[row][col] = count;
 			return 1;
 		}
@@ -141,7 +125,6 @@ int solveFromJournal(){
 
 void getMaze(char* file_name){
 	char c;
-	
 	FILE* file = fopen(file_name, "r");	
 	
 	while ((c = getc(file)) != EOF){ // this will determine how many columns and rows are needed to alocate them into the 2d array
