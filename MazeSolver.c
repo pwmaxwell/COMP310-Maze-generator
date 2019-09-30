@@ -68,7 +68,7 @@ int solveMaze(int row, int col){
 			
 			
 			maze[row][col] = count;
-			fprintf(journal,"Test %d %d %d \n",row, col, count);
+			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
 			solveMaze(row,col-1);
 		}
@@ -76,7 +76,7 @@ int solveMaze(int row, int col){
 			//lastmove = count;
 			
 			maze[row][col] = count;
-			fprintf(journal,"Test %d %d %d \n",row, col, count);
+			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
 			
 			
@@ -86,7 +86,7 @@ int solveMaze(int row, int col){
 			//lastmove = count;
 			
 			maze[row][col] = count;
-			fprintf(journal,"Test %d %d %d \n",row, col, count);
+			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
 			solveMaze(row, col + 1);	
 		}
@@ -94,7 +94,7 @@ int solveMaze(int row, int col){
 			//lastmove = count;
 			
 			maze[row][col] = count;
-			fprintf(journal,"Test%d %d %d \n",row, col, count);
+			fprintf(journal,"%d %d %d \n",row, col, count);
 			count++;
 
 			solveMaze(row-1, col);
@@ -112,8 +112,8 @@ int solveFromJournal(){
 	FILE* file3 = fopen("journal.txt", "r");
 	char firstValueChar[10];
 	int firstValue = 0;
-	int secondValue;
-	int thirdValue;
+	int secondValue = 0;
+	int thirdValue = 0;
 	printf("%s",firstValueChar);
 	for(int i = 0; i <rows; i++){ 		// sets all values to -1 as a baseline. will remove later
 		for(int j = 0; j <columns; j++){
@@ -124,16 +124,13 @@ int solveFromJournal(){
 		if(c == '\n')
 			journalRows++;
 	}
-	fclose(file3);
-	file3 = fopen("journal.txt", "w");
 	rewind(file3);
 	for(int i = 0; i <journalRows; i++){
-		fscanf(file3, "%s", firstValueChar);
-		printf("%s", firstValueChar);
-		//fscanf(file3, "%ls", firstValue);
-		//printf("%d", firstValue);
-		//printf("%i, %i, %i", firstValue, secondValue, thirdValue);
+		fscanf(file3, "%d %d %d", &firstValue, &secondValue, &thirdValue);
+		printf("%i, %i, %i", firstValue, secondValue, thirdValue);
 		printf("\n");
+		
+		maze[firstValue][secondValue] = thirdValue;
 	}
 	//printf("%d", firstValue);
 	/*while(fscanf(file3,"%s",&firstValueChar)!= EOF){
@@ -212,6 +209,28 @@ void searchSplitpath(){
 }
 
 int main(int argc, char *argv[]){
+	/*char str1[10], str2[10], str3[10];
+   int year;
+   FILE * fp;
+
+   fp = fopen ("journal.txt", "w+");
+   //fputs("We are in 2012", fp);
+   
+   rewind(fp);
+   fscanf(fp, "%s %s", str1, str2);
+   
+   printf("Read String1 |%s|\n", str1 );
+   printf("Read String2 |%s|\n", str2 );
+   printf("Read String3 |%s|\n", str3 );
+   printf("Read Integer |%d|\n", year );
+
+   fclose(fp);
+   
+   return(0);
+	*/
+	
+	
+	
 	char *journalWrite = NULL;
 	char *journalRead = NULL;
 	
