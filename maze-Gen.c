@@ -7,9 +7,10 @@
  	* Starting position is represented with an 's'
 	* This program is designed to take multiple command line arguments in a sepecific order
 		* EXAMPLE:
-		* ./Maze-Gen.o -h 40 -w 40 -a "dfs" -n "maze" -c 5
+		* ./Maze-Gen.o -d -h 40 -w 40 -a "dfs" -n "maze" -c 5
 		
 		* EXPLANATION:
+		* '-d' will enable debug mode that prints off variables as they are passed around
 		* '-h 40' will set the height of the maze to 40
 		* '-w 40' will set the width of the maze to 40
 		* '-a "dfs"' will set the maze generation algorithm to depth-first search (see below for other options)
