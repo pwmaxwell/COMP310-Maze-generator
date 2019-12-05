@@ -45,6 +45,8 @@
 #define DEFAULT_NAME "maze"
 #define DEFAULT_COUNT 1
 
+
+
 //MAZE STRUCTURE
 struct Maze{
 	int height;
@@ -56,10 +58,189 @@ struct Maze{
 
 //GLOBAL DEBUG BOOL
 bool debug = false;
-
+int** mazeArray;
+int** visitedArray; //testing with visited array. may try queue or stack
+int dfsRowSize;
+int dfsColSize;
 //INITIALIZE FUNCTIONS
 void initMaze(struct Maze*, int argc, char* argv[]);	
 
+void printMaze(){
+	for (int i = 0; i < dfsRowSize; ++i) { //this will print out the maze dfsRowSize
+		for (int j = 0; j < dfsColSize; ++j) { // dfsColSize for 11
+			if(mazeArray[i][j] !=99) 
+				printf("%3i", mazeArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
+		}
+		printf("\n");
+	}
+	printf("\n");
+	for (int i = 0; i < 11; ++i) { //this will print out the maze dfsRowSize
+		for (int j = 0; j < 11; ++j) { // dfsColSize for 11
+			if(visitedArray[i][j] !=99) 
+				printf("%3i", visitedArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
+		}
+		printf("\n");
+	}
+}
+
+void dfs(int dfsRowSize, int dfsColSize){
+	
+	srand(time(0));
+	int startCol = (dfsColSize -1) / 2;
+	int startRow = (dfsRowSize -1) / 2;
+	int endRow; //do we even need to set the end here? i think the algorithm may be able to do that itself
+	int endCol;
+	printf("start: %d %d \n", startRow, startCol);
+
+	mazeArray = malloc(dfsRowSize * sizeof(int*)); //allocating the array
+	for(int i = 0; i< dfsRowSize; i++){
+		mazeArray[i]= malloc(dfsColSize * sizeof(int*));
+	}
+	printf("dfs: %d %d \n", dfsRowSize, dfsColSize);
+	visitedArray = malloc(dfsRowSize * sizeof(int*));
+	for(int i = 0; i< dfsRowSize; i++){
+		visitedArray[i]= malloc(dfsColSize * sizeof(int*));
+	}
+	printf("dfs: %d %d \n", dfsRowSize, dfsColSize);
+	for(int i = 0; i < dfsRowSize; i++){
+		for( int j = 0; j < dfsColSize; j++){
+			mazeArray[i][j] = 1;
+		}
+	}
+	for(int i = 0; i < dfsRowSize; i++){
+		for( int j = 0; j < dfsColSize; j++){
+			visitedArray[i][j] = 1;
+		}
+	}
+	//for(int i = 0; i < dfsColSize; i++){
+	//	mazeArray[i][0] = 2;
+	//	mazeArray[i][dfsColSize-1] = 2;
+	//}
+	//for(int i = 0; i < dfsRowSize; i++){
+		//mazeArray[0][i] = 2;
+		//mazeArray[dfsRowSize - 1][i] = 2;
+	//}
+	
+	mazeArray[startRow][startCol] = 0; //set  the start location
+	// Time to start making the maze
+	int curRow = startRow;
+	int curCol = startCol;
+	int testCount = 100;
+	while(testCount >= 0){
+		int direction = rand() % (4-1+1)+1; //choose direction to move (if it can move that way)
+		printf("cur: %d %d \n", curRow, curCol);
+		printf("dir: %d \n", direction);
+		printf("dfs: %d \n", dfsRowSize);
+		
+		if(direction == 1 && curRow != 0 && curRow - 1 != 0){ //up
+			if(mazeArray[curRow - 2][curCol] == 1){
+				mazeArray[curRow - 1][curCol] = 0;
+				mazeArray[curRow - 2][curCol] = 0;
+				curRow = curRow -2;
+			}
+		}
+		if(direction == 2 && curRow + 1 != dfsRowSize && curRow +2 != dfsRowSize){ //down
+			//mazeArray[curRow][curCol] = 9;
+			if(mazeArray[curRow + 2][curCol] == 1){
+				mazeArray[curRow +1 ][curCol] = 0;
+				mazeArray[curRow +2 ][curCol] = 0;
+				curRow = curRow + 2;
+			}
+		}
+		if(direction == 3 && curCol != dfsColSize && curCol + 1 != dfsColSize){ //right 
+			if(mazeArray[curRow][curCol + 2] == 1){
+				mazeArray[curRow][curCol + 1] = 0;
+				mazeArray[curRow][curCol + 2] = 0;
+				curCol = curCol +2;
+			}
+		}
+
+		if(direction == 4 && curCol != 0 && curCol -1 != 0){ //left
+			if(mazeArray[curRow][curCol-2] == 1){
+				mazeArray[curRow][curCol-1] = 0;
+				mazeArray[curRow][curCol-2] = 0;
+				curCol = curCol -2;
+				printf("TESTING");
+			}
+		}
+		
+		//commence backtracking. will shorten later....
+		int backtrackingCount = 0; //really bad way of backtracking
+		if(curRow != 0 && curRow - 1 != 0 && curRow - 2 != 0){
+			if(mazeArray[curRow - 2][curCol] == 0){
+				backtrackingCount = backtrackingCount + 1;
+			}
+		}
+		else{
+			backtrackingCount = backtrackingCount + 1;
+			printf("TESTINGTESTING");
+		}
+		if(curRow != dfsRowSize - 1 && curRow + 1 != dfsRowSize - 1 && curRow + 2 != dfsRowSize - 1){
+			if(mazeArray[curRow + 2][curCol] == 0){
+				backtrackingCount = backtrackingCount + 1;
+				
+			}
+		}
+		else{
+			backtrackingCount = backtrackingCount + 1;
+			printf("TESTINGTESTING");
+		}
+		if(curCol != 0 && curCol -1 != 0 && curCol - 2 != 0){
+			if(mazeArray[curRow][curCol - 2] == 0){
+				backtrackingCount = backtrackingCount + 1;
+			}
+		}
+		else{
+			backtrackingCount = backtrackingCount + 1;
+			printf("TESTINGTESTING");
+		}
+		if(curCol != dfsColSize - 1 && curCol +1 != dfsColSize - 1 && curCol + 2 != dfsColSize - 1){
+			if(mazeArray[curRow][curCol + 2] == 0){
+				backtrackingCount = backtrackingCount + 1;
+			}
+		}
+		else{
+			backtrackingCount = backtrackingCount + 1;
+			printf("TESTINGTESTING");
+		}
+		printf("%d \n",backtrackingCount);
+		
+		if(backtrackingCount >= 4){
+			if(mazeArray[curRow - 1][curCol] == 0 && visitedArray[curRow - 1][curCol] != 0){
+				visitedArray[curRow - 1][curCol] = 0;
+				visitedArray[curRow][curCol] = 0;
+				curRow = curRow - 2;	
+				
+			}
+			if(mazeArray[curRow + 1][curCol] == 0 && visitedArray[curRow + 1][curCol] != 0){
+				visitedArray[curRow + 1][curCol] = 0;
+				visitedArray[curRow][curCol] = 0;
+				curRow = curRow +2;
+				
+			}
+			if(mazeArray[curRow][curCol - 1] == 0 && visitedArray[curRow][curCol - 1] != 0){
+				visitedArray[curRow][curCol - 1] = 0;
+				visitedArray[curRow][curCol] = 0;
+				curCol = curCol -2;
+				
+			}
+			if(mazeArray[curRow][curCol + 1] == 0 && visitedArray[curRow][curCol + 1] != 0){
+				visitedArray[curRow][curCol + 1] = 0;
+				visitedArray[curRow][curCol] = 0;
+				curCol = curCol + 2;
+				
+			}
+			//printMaze();
+		}
+		printf("%d \n", backtrackingCount);
+		backtrackingCount = 0;
+		
+		
+		printMaze();
+		testCount = testCount-1;
+	}
+	
+}
 
 
 int main(int argc, char* argv[]){
@@ -77,8 +258,14 @@ int main(int argc, char* argv[]){
 	printf("Here is the value of name: %s\n", mazeStruct_ptr->name);
 	printf("Here is the value of count: %d\n", mazeStruct_ptr->count);
 	
+	if(strcmp(mazeStruct_ptr->alg, "dfs") == 0){// god this line took me a while to figure out why "if(alg == "dfs"" was not working...
+		dfs(mazeStruct_ptr->height, mazeStruct_ptr->width);
+	}
+	
 	return 0; // End condition for main
 }
+
+
 
 void initMaze(struct Maze *maze, int argc, char *argv[]){
 	int local_height, local_width, local_count, opt = 1;
