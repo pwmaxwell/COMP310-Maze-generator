@@ -62,6 +62,9 @@ int** mazeArray;
 int** visitedArray; //testing with visited array. may try queue or stack
 int dfsRowSize;
 int dfsColSize;
+FILE* file;
+int test; //remove later
+int test2; //remove later
 //INITIALIZE FUNCTIONS
 void initMaze(struct Maze*, int argc, char* argv[]);	
 
@@ -74,8 +77,8 @@ void printMaze(){
 		printf("\n");
 	}
 	printf("\n");
-	for (int i = 0; i < 11; ++i) { //this will print out the maze dfsRowSize
-		for (int j = 0; j < 11; ++j) { // dfsColSize for 11
+	for (int i = 0; i < dfsRowSize; ++i) { //this will print out the maze dfsRowSize
+		for (int j = 0; j < dfsColSize; ++j) { // dfsColSize for 11
 			if(visitedArray[i][j] !=99) 
 				printf("%3i", visitedArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
 		}
@@ -83,12 +86,28 @@ void printMaze(){
 	}
 }
 
+int createFile(){
+	file = fopen("maze.txt", "w");
+	
+	for(int i = 0; i < test; i++){
+		for(int j = 0; j < test2; j++){
+			fprintf(file, "%d ", mazeArray[i][j]);
+			//printf("%d \n", dfsColSize);
+		}
+		fprintf(file, "\n");
+	}
+	//fprintf(file, "test");
+	return 1;
+}
+
 void dfs(int dfsRowSize, int dfsColSize){
+	test = dfsRowSize;
+	test2 = dfsColSize;
 	
 	srand(time(0));
 	int startCol = (dfsColSize -1) / 2;
 	int startRow = (dfsRowSize -1) / 2;
-	int endRow; //do we even need to set the end here? i think the algorithm may be able to do that itself
+	int endRow; 
 	int endCol;
 	printf("start: %d %d \n", startRow, startCol);
 
@@ -236,9 +255,11 @@ void dfs(int dfsRowSize, int dfsColSize){
 		backtrackingCount = 0;
 		
 		
-		printMaze();
+		//printMaze();
 		testCount = testCount-1;
 	}
+	createFile();
+	//printMaze();
 	
 }
 
