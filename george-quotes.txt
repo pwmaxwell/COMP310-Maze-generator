@@ -1,0 +1,189 @@
+A list of 89 quotes by George collected by Nick Kolasinski during his Fall 2019 semester Operating Systems class
+It was September 5, 2019 when Professor George said he had a student in a previous class record some of his more notable quotes
+	That was the day I realized that I am not original, and never will be... lol.
+
+The format of this george.quotes file is:
+<Quote>: Even number rows are the quotes
+<Date>: The following Odd number row is the corresponding date
+The quotes begin at row 10, and the longest quote is 73 chars long.
+
+Torture will be administered at the utmost degree of love.
+-	August 27, 2019
+Midterms and finals are relics of the Industrial Revolution.
+-	August 27, 2019
+(One) Consequence of the Industrial Revolution is that the education system has been broken for hundreds of years... don't learn how to turn a screw, invent a new one.
+-	August 27, 2019
+[Don't cheat on tests, don't be academically dishonest] and don't let the troops down.
+-	August 27, 2019
+C is the new F.
+-	August 27, 2019
+The path to knowledge is a recursive concept.
+-	August 27, 2019
+Bring your laptop to class; Always have code to show; And cite your source, even from Stack Overflow.
+-	August 27, 2019
+This is the class that will make you a master at computer programming.
+-	August 29, 2019
+Make it work first then look good.
+-	August 29, 2019
+'Wow this test would have been sooo easy... if only I had done the homework.' -us
+-	August 29, 2019
+I like people to spend all their time on my homework, but you can spend 70% of your time on my homework.
+-	September 3, 2019
+I'm not looking for perfection, I'm looking for excellence, but I will settle for very good.
+-	September 3, 2019
+I am the book.
+-	September 5, 2019
+If you know operating systems you don't need drugs; they are your drugs.
+-	September 5, 2019
+Starter code is like my daughters toys; they're squishy, soft, and they make you feel good.
+-	September 5, 2019
+I'm here to create problem solvers & world leaders... if I'm not doing that I have no business to be here. Replace me with five monkeys; they could teach you C.
+-	September 5, 2019
+The Jesuit pedagogy equivalent for this class is found through pointers.
+-	September 5, 2019
+Commit daily - as often as you can. It's really that important. Not doing this WILL set you up for failure.
+-	September 17, 2019
+This class is going to get harder... it's for your own good.
+-	September 17, 2019
+We have been failed by our predecessors.
+-	September 17, 2019
+Git is a form of thought - it's like John F. Kennedy: we choose to go to the moon... We choose to program...
+-	September 17, 2019
+I know how to write bad code in many languages... starting with C.
+-	September 17, 2019
+The New World is unforgiving.
+-	September 17, 2019
+You have all sinned, but I am going to make a blanket blessing right now... your Grades may still suffer, but I forgive you.
+-	September 17, 2019
+It is true that a diamond is forever, but so is recursion.
+-	September 17, 2019
+Has anyone been in my class long enough to know that I'm writing a book?
+-	September 17, 2019
+Look at my code... I use word!!! That's what writers do.
+-	September 17, 2019
+An extreme act of courage; not only did I visit the Russian hacker's website, but I downloaded it and uploaded it too. I risked my life.
+-	September 17, 2019
+I feel like I'm a happier person because I use the command line.
+-	October 1, 2019
+I REFUSE to give you a zero... isn't that powerful?
+-	October 1, 2019
+Most of us spend our lives in the wandering stage[of life]... our ultimate goal is enlightenment.
+-	October 1, 2019
+Sure, you can search for something... but if you GREP for it, you are high society.
+-	October 1, 2019
+Genocide? That's not cool.
+-	October 1, 2019
+I feel like I'm at a chapel giving a sermon.
+-	October 1, 2019
+Preparation happens in the mind.
+-	October 10, 2019
+I almost have a PhD in this subject (Adversity).
+-	October 10, 2019
+Systems is about learning to cope with lots of pain and suffering over time.
+-	October 10, 2019
+You can find God in the kernel of Linux.
+-	October 10, 2019
+I've already seen the worst of everything in life... through C.
+-	October 10, 2019
+Nothing in the world is so important that you have to stop the world for it. Unless it's like a bombing from World War 2.
+-	October 10, 2019
+I teach my students how to do this correctly... So I should do this correctly.
+-	October 10, 2019
+I used to have a huge interest in earthquakes, but we do not have time for that right now.
+-	October 10, 2019
+One thing I want to teach you in life is how to do something cool. In life we spend all our time trying to make others happy, so here let's do something cool for ourselves.
+-	October 10, 2019
+The great thing about having all these plans is that I will fail at all of them (and that's a good thing).
+-	October 10, 2019
+You may ask, 'What did I do to deserve this'. Nothing, I was just being nice.
+-	October 15, 2019
+This is cool stuff, it would seem a lot cooler if the room weren't so hot.
+-	October 15, 2019
+The room may not be cool... but pthreads are.
+-	October 15, 2019
+My dog [a Shih Tzu] is the laziest known life form in my life today. He got so lazy we had to move his bed closer to the door so he could do his duty and protect us.
+-	October 15, 2019
+Don't you all love it? You don't. The reason we have homework is to make you love it.
+-	October 15, 2019
+I've seen relationships get broken up over my projects in my class. Threads are detrimental to relationship health.
+-	October 15, 2019
+I like standing at this podium, it's like I am reading from scripture, although I only have my phone here.
+-	October 17, 2019
+Because we were on a fairly high floor, I wanted to jump out the window (when I was reading the book for COMP 170).
+-	October 17, 2019
+Using git is not a substitute for actual human connection.
+-	October 17, 2019
+There is a certain elegance in C that you can't quite explain.
+-	October 17, 2019
+My definition of laziness is always compared to my shih tzu.
+-	October 22, 2019
+If you don't hear something three times, you don't really learn it.
+-	October 22, 2019
+First I want to scare the... you know what... out of you, and then I want to empower you.
+-	October 22, 2019
+Parenting lesson: Don't ever give your kids a flip phone (sad pause) they'll hate you.
+-	October 22, 2019
+The world is never worse if you try to plant a few flowers along the way and let people walk in the garden.
+-	October 31, 2019
+We need a John F Kennedy moment; even though something is hard doesn't mean we can't do it.
+-	November 12, 2019
+Now I know you can code something in C... You still can't code it well, but I know you can all code it.
+-	November 12, 2019
+Everything will be smart in the future, except you.
+-	November 12, 2019
+I am an eternal optimist.
+-	November 12, 2019
+My hope is that this course teaches you about the value of research, not just operating systems.
+-	November 12, 2019
+I started levitating because I started teaching about sorting to my 170 students.
+-	November 12, 2019
+Sometimes people try and impress me with grand designs, but I prefer clean... Less is more.
+-	November 18, 2019
+We are not doing what we call a... PhD dissertation here.
+-	November 18, 2019
+When Google Docs came out I really hated it... now I love it. 94% of the features in Word were never being used. Overcomplicating =/= being useful.
+-	November 18, 2019
+Why do we spend all our time trying to be perfect? Because we need 100% in every class... Except we don't.
+-	November 18, 2019
+Use methods to avoid repeating yourself. 
+-	November 18, 2019
+Especially around the holiday season, I am very generous.
+-	November 18, 2019
+People who do very well in my class don't last very long in the job market. They go straight into employment.
+-	November 18, 2019
+I really don't think homework is important anymore... I think it's obsolete.
+-	November 18, 2019
+I don't want to just see people becoming good at homework and tests, I want them to succeed in the real world.
+-	November 18, 2019
+What kind of students are we trying to create here? Are we trying to create a student that follows the rules?
+-	November 18, 2019
+We do C in here so that we really suffer... It's like the biblical suffering: suffer, die, and resurrect. 
+-	November 21, 2019
+Success does not come in anything until you have your first success.
+-	November 21, 2019
+I've come to come to the peaceful *sad scoff* existence that I'm not going to master every language and system out there.
+-	November 21, 2019
+If you're ever near anything with the word NASA on it - it's cool!
+-	November 21, 2019
+My time machine doesn't work yet... but we're gonna be traveling to other dimensions so forget about time.
+-	November 21, 2019
+Save the environment, don't make a powerpoint - it wastes space in the cloud.
+-	November 26, 2019
+I don't get impressed by fancy words.
+-	November 26, 2019
+I was listening to Megadeth the other day, it sounded like an SAT prep class. Metal bands are actually known for using really big words.
+-	November 26, 2019
+Reflect on what you learned over the semester: what did you learn about systems other than it's really hard!
+-	November 26, 2019
+I'm already the most out-of-the-box thinker because when I wake up in the morning I am already outside of the box.
+-	November 26, 2019
+To get an F in my class you must be like John F Kennedy going to the moon: "[I] choose to get an F".
+-	November 26, 2019
+Ask not what your professor can do for you, but ask what you can do for your professor.
+-	November 26, 2019
+I want you to think about John F Kennedy and going to the moon.
+-	November 26, 2019
+We can't even get [to the moon] now, people say we are getting smarter - I think we are getting dumber, as a collective society.
+-	November 26, 2019
+Saturday Finals? I'm sorry Loyola, Copernicus called, you are not the center of the Universe.
+-	November 26, 2019
