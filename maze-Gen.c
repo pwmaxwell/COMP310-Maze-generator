@@ -91,13 +91,29 @@ int createFile(){
 	
 	for(int i = 0; i < test; i++){
 		for(int j = 0; j < test2; j++){
-			fprintf(file, "%d ", mazeArray[i][j]);
+			if(mazeArray[i][j] == 1){
+				fprintf(file, "b");
+			}
+			if(mazeArray[i][j] == 0){
+				fprintf(file, " ");
+			}
 			//printf("%d \n", dfsColSize);
 		}
 		fprintf(file, "\n");
 	}
 	//fprintf(file, "test");
 	return 1;
+}
+int createExit(int dfsRowSize, int dfsColSize){
+	//exitLocation = rand() % (4-1+1)+1; // 1 = top row, 2 = bottom row, 3 = right col, 4 = left col
+	int exitLocation2 = rand() % dfsColSize;
+	srand(time(0));
+	printf("%d \n", exitLocation2);
+	if(mazeArray[1][exitLocation2] == 0){
+		mazeArray[0][exitLocation2] = 0;
+		return 0;
+	}
+	createExit(dfsRowSize, dfsColSize);
 }
 
 void dfs(int dfsRowSize, int dfsColSize){
@@ -112,22 +128,15 @@ void dfs(int dfsRowSize, int dfsColSize){
 	printf("start: %d %d \n", startRow, startCol);
 
 	mazeArray = malloc(dfsRowSize * sizeof(int*)); //allocating the array
-	for(int i = 0; i< dfsRowSize; i++){
-		mazeArray[i]= malloc(dfsColSize * sizeof(int*));
-	}
-	printf("dfs: %d %d \n", dfsRowSize, dfsColSize);
 	visitedArray = malloc(dfsRowSize * sizeof(int*));
 	for(int i = 0; i< dfsRowSize; i++){
+		mazeArray[i]= malloc(dfsColSize * sizeof(int*));
 		visitedArray[i]= malloc(dfsColSize * sizeof(int*));
 	}
 	printf("dfs: %d %d \n", dfsRowSize, dfsColSize);
 	for(int i = 0; i < dfsRowSize; i++){
 		for( int j = 0; j < dfsColSize; j++){
 			mazeArray[i][j] = 1;
-		}
-	}
-	for(int i = 0; i < dfsRowSize; i++){
-		for( int j = 0; j < dfsColSize; j++){
 			visitedArray[i][j] = 1;
 		}
 	}
@@ -144,7 +153,7 @@ void dfs(int dfsRowSize, int dfsColSize){
 	// Time to start making the maze
 	int curRow = startRow;
 	int curCol = startCol;
-	int testCount = 100;
+	int testCount = 400;
 	while(testCount >= 0){
 		int direction = rand() % (4-1+1)+1; //choose direction to move (if it can move that way)
 		printf("cur: %d %d \n", curRow, curCol);
@@ -179,7 +188,7 @@ void dfs(int dfsRowSize, int dfsColSize){
 				mazeArray[curRow][curCol-1] = 0;
 				mazeArray[curRow][curCol-2] = 0;
 				curCol = curCol -2;
-				printf("TESTING");
+				
 			}
 		}
 		
@@ -192,7 +201,6 @@ void dfs(int dfsRowSize, int dfsColSize){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
-			printf("TESTINGTESTING");
 		}
 		if(curRow != dfsRowSize - 1 && curRow + 1 != dfsRowSize - 1 && curRow + 2 != dfsRowSize - 1){
 			if(mazeArray[curRow + 2][curCol] == 0){
@@ -202,7 +210,7 @@ void dfs(int dfsRowSize, int dfsColSize){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
-			printf("TESTINGTESTING");
+			
 		}
 		if(curCol != 0 && curCol -1 != 0 && curCol - 2 != 0){
 			if(mazeArray[curRow][curCol - 2] == 0){
@@ -211,7 +219,7 @@ void dfs(int dfsRowSize, int dfsColSize){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
-			printf("TESTINGTESTING");
+			
 		}
 		if(curCol != dfsColSize - 1 && curCol +1 != dfsColSize - 1 && curCol + 2 != dfsColSize - 1){
 			if(mazeArray[curRow][curCol + 2] == 0){
@@ -220,9 +228,9 @@ void dfs(int dfsRowSize, int dfsColSize){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
-			printf("TESTINGTESTING");
+			
 		}
-		printf("%d \n",backtrackingCount);
+		
 		
 		if(backtrackingCount >= 4){
 			if(mazeArray[curRow - 1][curCol] == 0 && visitedArray[curRow - 1][curCol] != 0){
@@ -251,13 +259,14 @@ void dfs(int dfsRowSize, int dfsColSize){
 			}
 			//printMaze();
 		}
-		printf("%d \n", backtrackingCount);
+		
 		backtrackingCount = 0;
 		
 		
 		//printMaze();
 		testCount = testCount-1;
 	}
+	createExit(dfsRowSize, dfsColSize);
 	createFile();
 	//printMaze();
 	
@@ -279,7 +288,7 @@ int main(int argc, char* argv[]){
 	printf("Here is the value of name: %s\n", mazeStruct_ptr->name);
 	printf("Here is the value of count: %d\n", mazeStruct_ptr->count);
 	
-	if(strcmp(mazeStruct_ptr->alg, "dfs") == 0){// god this line took me a while to figure out why "if(alg == "dfs"" was not working...
+	if(strcmp(mazeStruct_ptr->alg, "dfs") == 0){
 		dfs(mazeStruct_ptr->height, mazeStruct_ptr->width);
 	}
 	

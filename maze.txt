@@ -1,11 +1,11 @@
-1 1 1 1 1 1 1 1 1 1 1 
-1 0 0 0 1 0 0 0 0 0 1 
-1 0 1 0 1 1 1 1 1 0 1 
-1 0 1 0 0 0 0 0 1 0 1 
-1 0 1 1 1 1 1 0 1 0 1 
-1 0 0 0 0 0 1 0 1 0 1 
-1 1 1 1 1 1 1 0 1 0 1 
-1 0 0 0 0 0 1 0 1 0 1 
-1 0 1 1 1 0 1 0 1 0 1 
-1 0 0 0 1 0 0 0 0 0 1 
-1 1 1 1 1 1 1 1 1 1 1 
+bbbbbbb bbb
+b         b
+b bbbbbbb b
+b       b b
+bbbbbbb b b
+b     b b b
+b bbbbb b b
+b b   b b b
+b b b bbb b
+b   b     b
+bbbbbbbbbbb
