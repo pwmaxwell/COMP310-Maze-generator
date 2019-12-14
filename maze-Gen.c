@@ -3,8 +3,8 @@
 
 /* Generates a two-dimensional ASCII maze file with one starting point and one exit. 
  * INFO:
-	* Walls are represented with a 'b'
- 	* Starting position is represented with an 's'
+	* Walls are represented with a '1'
+ 	* Starting position is represented with an '2'
 	* This program is designed to take multiple command line arguments in a specific order
 		* EXAMPLE:
 		* ./Maze-Gen.o -h 40 -w 40 -a "dfs" -n "maze" -c 5
@@ -19,7 +19,7 @@
 			* "rka"		| Randomized Kruskal's Algorithm *
 			* "rpa"		| Randomized Prim's Algorithm    *
 			* "wa"		| Wilson's Algorithm             *
-		
+
 		* '-n "maze"' will set the output file's name to maze.txt | NOTE: CANNOT BE >100 CHARACTERS
 		* '-c 5' will create 5 randomized mazes of size 'h' and 'w', using the "alg" and a name of "maze"
 			*NOTE: a number more than 1 (5 for this example) will number them off as seen below:
@@ -35,6 +35,7 @@
 #include <string.h>	// String type support library 		MAY OR MAY NOT BE USED
 #include <time.h>	// Date and time utilities; aids in randomization for seeds
 #include <iso646.h>	// Alternate operators and tokens; helps improve readability 
+
 
 //Thanks to user August Karlstrom from https://stackoverflow.com/questions/34134074/c-size-of-two-dimensional-array
 	// This is an easy macro to get the length of an array quickly without room for error
@@ -62,9 +63,13 @@ struct Maze{
 	int** visitedArray;
 } MAZE_DEFAULT = {DEFAULT_H, DEFAULT_W, DEFAULT_ALG, DEFAULT_NAME, DEFAULT_COUNT};
 
-
-//GLOBAL VARIABLES:
+//FILTHY, FILTHY GLOBAL VARIALBES
+int** mazeArray;
+int** visitedArray; //testing with visited array. may try queue or stack
+int dfsRowSize;
+int dfsColSize;
 FILE* file;
+int globalCount = 0;
 
 //GLOBAL DEBUG BOOL:
 bool debug = false;
@@ -73,9 +78,9 @@ bool debug = false;
 void initMaze(struct Maze *maze, int argc, char* argv[]);	
 void printStats(struct Maze *maze);
 void dfs(struct Maze *maze);
-void printMaze(struct Maze *maze);
-void createFile(struct Maze *maze);
-void createExit(struct Maze *maze);	
+void printMaze();
+void createFile(struct Maze *maze, int count);	// ideally would take (struct Maze* maze, int count) arguments
+int createExit(int dfsRowSize, int dfsColSize);
 int** allocateMazeSize(struct Maze *maze, int** mazeMap); // this is unused right now
 void getAndPrintQuote();	// this doesn't work yet
 
@@ -86,16 +91,29 @@ int main(int argc, char* argv[]){
 	
 	mazeStruct = MAZE_DEFAULT; //set default values 
 	
-	initMaze(mazeStruct_ptr, argc, argv);	// get the command line arguments
-	if(debug)printf("DEBUG: start of main\n");
-	printStats(mazeStruct_ptr);	//print off the values for the user to confirm
-		
-	dfs(mazeStruct_ptr);
-	printMaze(mazeStruct_ptr);
-	createFile(mazeStruct_ptr);
-	//getAndPrintQuote();
+	srand(time(NULL)); // used later in getAndPrintQuote()
 	
+	initMaze(mazeStruct_ptr, argc, argv);	// get the command line arguments
+	
+	if(mazeStruct_ptr->count >= 1){
+		/*char name[100];
+		strcpy(name, mazeStruct_ptr->name);
+		char txt[4] = ".txt";
+		*/
+		int count = 0;
+		printStats(mazeStruct_ptr);	//print off the values for the user to confirm
+		while (count < mazeStruct_ptr->count){
+			if(debug)printf("DEBUG: start of main\n");
+		
+			dfs(mazeStruct_ptr);
+			printMaze(mazeStruct_ptr);
+			getAndPrintQuote();
+			count++;
+			printf("\n");
+		}
+	}
 	if(debug)printf("DEBUG: end of main\n");
+
 	return 0; // End condition for main
 }
 
@@ -216,65 +234,98 @@ void initMaze(struct Maze *maze, int argc, char *argv[]){
 	if(debug) printf("DEBUG: end of initMaze().\n");
 }
 
-void printMaze(struct Maze* maze){
+void printMaze(){
 	if(debug)printf("DEBUG: start of printMaze()\n");
-	
-	for (int i = 0; i < maze->width; ++i) { //this will print out the maze width
-		for (int j = 0; j < maze->height; ++j) { // height for 11
-			if(maze->mazeArray[i][j] !=99){
-				printf("%3i", maze->mazeArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
-				
-			}
+
+	for (int i = 0; i < dfsRowSize; ++i) { //this will print out the maze dfsRowSize
+		for (int j = 0; j < dfsColSize; ++j) { // dfsColSize for 11
+			if(mazeArray[i][j] !=99) 
+				printf("%3i", mazeArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
 		}
 		printf("\n");
 	}
+	printf("\n");
+/*	for (int i = 0; i < dfsRowSize; ++i) { //this will print out the maze dfsRowSize
+		for (int j = 0; j < dfsColSize; ++j) { // dfsColSize for 11
+			if(visitedArray[i][j] !=99) 
+				printf("%3i", visitedArray[i][j]); //information on formating taken from https://www.eecs.wsu.edu/~cs150/reading/printf.htm
+		}
+		printf("\n");
+	}*/
 	if(debug)printf("DEBUG: end of printMaze()\n");
 }
 
-void createFile(struct Maze* maze){
+void createFile(struct Maze *maze, int count){
 	if(debug)printf("DEBUG: start of createFile()\n");
-	file = fopen("maze.txt", "w");
 	
+	/*char counter[3];
+	char nameFormat[110];
+	char txt[4] = ".txt";	
 	
+	FILE *files[count];
 	
-	for(int i = 0; i < maze->height; i++){
-		for(int j = 0; j < maze->width; j++){
-			fprintf(file, "%d ", maze->mazeArray[i][j]);
+
+	sprintf(counter, "%d", count);
+	strcpy(nameFormat, maze->name);
+	if(debug)printf("DEBUG: name so far: %s\n", nameFormat);
+	
+	char* counter_ptr = counter;
+	strcat(nameFormat, counter_ptr);
+	if(debug)printf("DEBUG: name so far: %s\n", nameFormat);
+
+	sprintf(nameFormat, "%s.txt", nameFormat);
+	if(debug)printf("DEBUG: name so far: %s\n", nameFormat);
+	
+	for(int i = 0; i < count; i++){
+		sprintf(nameFormat, "%d", i);
+		files[i] = fopen(nameFormat,"w");
+	}
+	
+	if(debug)printf("DEBUG: you got here!!! you should work at google");
+	
+	if(debug)printf("DEBUG: end of createFile()\n");
+	/*/
+		// the above is a work in progress to get the create file method to work with the naming scheme 
+	char filename[100];
+	strcpy(filename, maze->name);
+	sprintf(filename, "%s%d.txt", filename, globalCount);
+	
+	FILE *file = fopen(filename, "w");
+
+	for(int i = 0; i < dfsRowSize; i++){
+		for(int j = 0; j < dfsColSize; j++){
+			if(mazeArray[i][j] == 1){
+				fprintf(file, "b");
+			}
+			if(mazeArray[i][j] == 0){
+				fprintf(file, " ");
+			}
 		}
 		fprintf(file, "\n");
 	}
-	if(debug)printf("DEBUG: end of createFile()\n");
+	globalCount++;
 }
 
 void dfs(struct Maze* maze){
 	if(debug)printf("DEBUG: start of dfs()\n");
-	int width = maze->width;
-	int height = maze->height;
-	int** mazeArray; 
-	int** visitedArray;
+	dfsRowSize = maze->width;
+	dfsColSize = maze->height;
 	
 	srand(time(0));
-	int startCol = (width -1) / 2;
-	int startRow = (height -1) / 2;
+	int startCol = (dfsColSize -1) / 2;
+	int startRow = (dfsRowSize -1) / 2;
 	int endRow; 
 	int endCol;
-	
-	mazeArray = malloc(height * sizeof(int*)); //allocating the array
-	for(int i = 0; i< height; i++){
-		mazeArray[i]= malloc(width * sizeof(int*));
+
+	mazeArray = malloc(dfsRowSize * sizeof(int*)); //allocating the array
+	visitedArray = malloc(dfsRowSize * sizeof(int*));
+	for(int i = 0; i< dfsRowSize; i++){
+		mazeArray[i]= malloc(dfsColSize * sizeof(int*));
+		visitedArray[i]= malloc(dfsColSize * sizeof(int*));
 	}
-	visitedArray = malloc(height * sizeof(int*));
-	for(int i = 0; i< height; i++){
-		visitedArray[i]= malloc(width * sizeof(int*));
-	}
-	printf("dfs: %d %d \n", height, width);
-	for(int i = 0; i < height; i++){
-		for( int j = 0; j < width; j++){
+	for(int i = 0; i < dfsRowSize; i++){
+		for( int j = 0; j < dfsColSize; j++){
 			mazeArray[i][j] = 1;
-		}
-	}
-	for(int i = 0; i < height; i++){
-		for( int j = 0; j < width; j++){
 			visitedArray[i][j] = 1;
 		}
 	}
@@ -283,14 +334,9 @@ void dfs(struct Maze* maze){
 	// Time to start making the maze
 	int curRow = startRow;
 	int curCol = startCol;
-	int testCount = 200;
-	
-	while(testCount >= 1){
-		
+	int testCount = dfsRowSize*dfsColSize;
+	while(testCount >= 0){
 		int direction = rand() % (4-1+1)+1; //choose direction to move (if it can move that way)
-		//printf("cur: %d %d \n", curRow, curCol);
-		//printf("dir: %d \n", direction);
-		//printf("dfs: %d \n", height);
 		
 		if(direction == 1 && curRow != 0 && curRow - 1 != 0){ //up
 			if(mazeArray[curRow - 2][curCol] == 1){
@@ -299,14 +345,15 @@ void dfs(struct Maze* maze){
 				curRow = curRow -2;
 			}
 		}
-		if(direction == 2 && curRow + 1 != height && curRow +2 != height){ //down
+		if(direction == 2 && curRow + 1 != dfsRowSize && curRow +2 != dfsRowSize){ //down
+			//mazeArray[curRow][curCol] = 9;
 			if(mazeArray[curRow + 2][curCol] == 1){
 				mazeArray[curRow +1 ][curCol] = 0;
 				mazeArray[curRow +2 ][curCol] = 0;
 				curRow = curRow + 2;
 			}
 		}
-		if(direction == 3 && curCol != width && curCol + 1 != width){ //right 
+		if(direction == 3 && curCol != dfsColSize && curCol + 1 != dfsColSize){ //right 
 			if(mazeArray[curRow][curCol + 2] == 1){
 				mazeArray[curRow][curCol + 1] = 0;
 				mazeArray[curRow][curCol + 2] = 0;
@@ -319,6 +366,7 @@ void dfs(struct Maze* maze){
 				mazeArray[curRow][curCol-1] = 0;
 				mazeArray[curRow][curCol-2] = 0;
 				curCol = curCol -2;
+				
 			}
 		}
 		
@@ -332,7 +380,7 @@ void dfs(struct Maze* maze){
 		else{
 			backtrackingCount = backtrackingCount + 1;
 		}
-		if(curRow != height - 1 && curRow + 1 != height - 1 && curRow + 2 != height - 1){
+		if(curRow != dfsRowSize - 1 && curRow + 1 != dfsRowSize - 1 && curRow + 2 != dfsRowSize - 1){
 			if(mazeArray[curRow + 2][curCol] == 0){
 				backtrackingCount = backtrackingCount + 1;
 				
@@ -340,6 +388,7 @@ void dfs(struct Maze* maze){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
+			
 		}
 		if(curCol != 0 && curCol -1 != 0 && curCol - 2 != 0){
 			if(mazeArray[curRow][curCol - 2] == 0){
@@ -348,16 +397,18 @@ void dfs(struct Maze* maze){
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
+			
 		}
-		if(curCol != width - 1 && curCol +1 != width - 1 && curCol + 2 != width - 1){
+		if(curCol != dfsColSize - 1 && curCol +1 != dfsColSize - 1 && curCol + 2 != dfsColSize - 1){
 			if(mazeArray[curRow][curCol + 2] == 0){
 				backtrackingCount = backtrackingCount + 1;
 			}
 		}
 		else{
 			backtrackingCount = backtrackingCount + 1;
+			
 		}
-		//printf("backtrack: %d \n",backtrackingCount);
+		
 		
 		if(backtrackingCount >= 4){
 			if(mazeArray[curRow - 1][curCol] == 0 && visitedArray[curRow - 1][curCol] != 0){
@@ -385,46 +436,28 @@ void dfs(struct Maze* maze){
 				
 			}
 		}
-		//printf("backtrack (updated): %d \n", backtrackingCount);
-		backtrackingCount = 0;
 		
+		backtrackingCount = 0;
 		testCount = testCount-1;
-		//printf("test count: %d \n", testCount);
 	}
-	//printf("here");
 	
-	memcpy(maze->mazeArray, mazeArray, sizeof(maze->mazeArray));
-	createExit(maze);
-	printf("Maze created using dfs\n");
-	if(debug)printf("DEBUG: end of maze creation (dfs)\n");
+	createExit(dfsRowSize,dfsColSize);
+	createFile(maze, globalCount);
+	printf("Maze created using dfs\n\n");
+	if(debug)printf("DEBUG: end of dfs()\n");
 }
 
-int** allocateMazeSize(struct Maze* maze, int** mazeMap){
-	if(debug)printf("DEBUG: start of allocateMazeSize()");
-	
-	for(int i = 0; i< maze->width; i++){
-		mazeMap[i]= malloc(maze->height * sizeof(int*));
+int createExit(int dfsRowSize, int dfsColSize){
+	if(debug)printf("DEBUG: start of createExit()");
+	//exitLocation = rand() % (4-1+1)+1; // 1 = top row, 2 = bottom row, 3 = right col, 4 = left col
+	int exitLocation2 = rand() % dfsColSize;
+	srand(time(0));
+	if(mazeArray[1][exitLocation2] == 0){
+		mazeArray[0][exitLocation2] = 0;
+		return 0;
 	}
-	for(int i = 0; i < maze->height; i++){
-		for( int j = 0; j < maze->height; j++){
-			mazeMap[i][j] = 1;
-		}
-	}
-	if(debug)printf("DEBUG: end of allocateMazeSize()");
-	return mazeMap;
-}
-
-void createExit(struct Maze *maze){
-	bool exitFound = false;
-	
-	while(!exitFound){
-		srand(time(0));
-		int exitLocation = rand() % LEN(maze->mazeArray);
-		if(maze->mazeArray[1][exitLocation] == 0){
-			maze->mazeArray[0][exitLocation] = 0;
-			exitFound;
-		}
-	}
+	createExit(dfsRowSize, dfsColSize);
+	if(debug)printf("DEBUG: end of createExit()");
 }
 
 void getAndPrintQuote(){
@@ -434,20 +467,40 @@ void getAndPrintQuote(){
 	char line[175], ch;
 	FILE *fp;
 	
-	count = 0;
-	fp = fopen("george.quotes", "r");
-	
+	count = 0;	
+	fp = fopen("george-quotes.txt", "r");
+	if(fp == NULL){
+		printf("Error, george-quotes.txt not found.");
+		if(debug)printf("DEBUG: end of getAndPrintQuote()\n");
+		return;
+	}
 	//generate a random number between 10 and 186
 	line_no = (rand() % (188 - 10 + 1) + 10); //found from https://www.geeksforgeeks.org/generating-random-number-range-c/
 		if(line_no > 188 || line_no < 10) line_no = 126;// if it somehow generates a number too large, set the quote to my favorite one
 		if(line_no % 2 not_eq 0) line_no--;	// if line_no isn't even
+	if(debug)printf("DEBUG: here is the line number %d\n", line_no);
 	
-	while(!feof(fp)){
-		while(count > 0){
-			fscanf(fp, "%s\t",line);
-			printf("go");
+	
+	while(fgets(line, sizeof(line), fp) !=NULL){
+		if(count-1 == line_no){		// accounting for off-by-one, if the line is present:
+			printf("\n%s", line);		// print it
+			
+			
+			fgets(line,sizeof(line),fp);	// and then grab the next line (should be the date)
+			
+			printf("\t-George Thiruvathukal, %s", line);	// and then print, and attribute the quote
+			
+			fclose(fp);
+			
+			if(debug)printf("DEBUG: end of getAndPrintQuote()\n");
+			
+			return;
+		}
+		else{
+			count++;
 		}
 	}
+	
 	fclose(fp);
 	if(debug)printf("DEBUG: end of getAndPrintQuote()\n");
 }
